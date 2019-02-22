@@ -1,14 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Bomb from "./Bomb.png";
-import {reveivePlayersMines} from '../actions/otherPlayerMovement'
+import { reveivePlayersMines } from "../actions/otherPlayerMovement";
 
 class Bullet extends Component {
-
-  componentDidMount(){
-    reveivePlayersMines()
+  componentDidMount() {
+    reveivePlayersMines();
   }
-
 
   render() {
     const mines = this.props.mines;
@@ -17,18 +15,14 @@ class Bullet extends Component {
         {mines.map(mine => (
           <div
             style={{
-              alignContent:'center',
-              // border: 2,
-              // padding: 25,
-              // borderStyle: 'solid',
+              alignContent: "center",
               position: "absolute",
-              display: 'inline-block',
-              top: mine.oldPosy-15,
-              left: mine.oldPosX-15,
+              display: "inline-block",
+              top: mine.oldPosy - 15,
+              left: mine.oldPosX - 15,
               backgroundImage: `url(${Bomb})`,
               width: 30,
-              height:30 
-        
+              height: 30
             }}
           />
         ))}

@@ -1,7 +1,7 @@
 import store from "../store";
 import openSocket from "socket.io-client";
-// const socket = openSocket("http://localhost:5000/");
-const socket = openSocket("https://tankbserver.herokuapp.com/")
+
+const socket = openSocket("https://tankbserver.herokuapp.com/");
 
 export default function PlayerMovement(Player) {
   function getNewPosition(direction) {
@@ -65,7 +65,6 @@ export default function PlayerMovement(Player) {
     e.preventDefault();
     switch (e.keyCode) {
       case 37:
-
         return dispatchMove("WEST") & calculateDistance() & catchCoin();
       case 38:
         return dispatchMove("NORTH") & calculateDistance() & catchCoin();
@@ -91,14 +90,14 @@ export function calculateDistance() {
   const PlayerPosY = store.getState().player.position[1] - 40;
   const minesArray = store.getState().mines;
   const mineDistance = minesArray.map(mine => {
-    const mineX = mine.oldPosX ;
+    const mineX = mine.oldPosX;
     const mineY = mine.oldPosy;
     return Math.hypot(mineX - PlayerPosX, mineY - PlayerPosY);
   });
   mineDistance.splice(-1, 1).map(dis => {
     if (dis < 40) {
       Explosion(PlayerPosX, PlayerPosY);
-      alert('YOU LOSE!!!')
+      alert("YOU LOSE!!!");
     }
   });
 }
@@ -123,17 +122,17 @@ function Explosion(PlayerPosX, PlayerPosY) {
   };
   store.dispatch({
     type: "EXPLOSION",
-    payload: explosionPosition,
+    payload: explosionPosition
   });
-  socket.emit("explosion", explosionPosition)
-  ScoreCounter()
+  socket.emit("explosion", explosionPosition);
+  ScoreCounter();
 }
 
 function ScoreCounter() {
   store.dispatch({
-    type: "UPDATESCORE",
-  })
- }
+    type: "UPDATESCORE"
+  });
+}
 
 export function dropBullet() {
   const oldPosX = store.getState().player.position[0];
@@ -162,12 +161,9 @@ function dispatchPositionFlag() {
 }
 
 export function startGame() {
-
-  socket.emit('start-game', {
+  socket.emit("start-game", {
     id: socket.id,
-    position: [0,0],
-    
-  })
-  dispatchPositionFlag()
-
+    position: [0, 0]
+  });
+  dispatchPositionFlag();
 }

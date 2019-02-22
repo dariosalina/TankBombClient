@@ -1,54 +1,46 @@
 import store from "../store";
-import openSocket from 'socket.io-client';
-// const socket = openSocket('http://localhost:5000/');
-const socket = openSocket("https://tankbserver.herokuapp.com/")
+import openSocket from "socket.io-client";
 
-export function receivePlayerData() { 
- 
-socket.on("move-completed", data => {
-  const playersID = store.getState().playersID
-    if (data.ID !== playersID)
-   dispatchOtherPlayerMove(data.payload)
-  })
+const socket = openSocket("https://tankbserver.herokuapp.com/");
 
- 
+export function receivePlayerData() {
+  socket.on("move-completed", data => {
+    const playersID = store.getState().playersID;
+    if (data.ID !== playersID) dispatchOtherPlayerMove(data.payload);
+  });
 }
 
-function dispatchOtherPlayerMove(direction){
-    store.dispatch({
-        type: "MOVE_OTHERPLAYER",
-        payload: direction
-    })
-}
-
-export function reveivePlayersMines(){
-  socket.on("mines-to-client", data => {
-    const playersID = store.getState().playersID
-    if (data.ID !== playersID)
-
-    dispatchOtherPlayersMines((data.payload))
-    })
-}
-
-function dispatchOtherPlayersMines(position){
+function dispatchOtherPlayerMove(direction) {
   store.dispatch({
-      type: "DROP_MINE_OTHERPLAYER",
-      payload: position
-  })
+    type: "MOVE_OTHERPLAYER",
+    payload: direction
+  });
+}
+
+export function reveivePlayersMines() {
+  socket.on("mines-to-client", data => {
+    const playersID = store.getState().playersID;
+    if (data.ID !== playersID) dispatchOtherPlayersMines(data.payload);
+  });
+}
+
+function dispatchOtherPlayersMines(position) {
+  store.dispatch({
+    type: "DROP_MINE_OTHERPLAYER",
+    payload: position
+  });
 }
 
 export function reveivePlayersExplosions() {
-  socket.on ("explosion-to-client", data => {
-    const playersID = store.getState().playersID
-    if (data.ID !== playersID)
-    dispatchOtherPlayersExplosion(data.payload)
-  }) 
+  socket.on("explosion-to-client", data => {
+    const playersID = store.getState().playersID;
+    if (data.ID !== playersID) dispatchOtherPlayersExplosion(data.payload);
+  });
 }
 
-function dispatchOtherPlayersExplosion(position){
+function dispatchOtherPlayersExplosion(position) {
   store.dispatch({
-      type: "EXPLOSION_OTHERPLAYER",
-      payload: position
-  })
+    type: "EXPLOSION_OTHERPLAYER",
+    payload: position
+  });
 }
-
